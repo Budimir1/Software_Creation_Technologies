@@ -19,5 +19,4 @@
 - ⏳
 
 
-**Проект завершен на:**
-![Progress](https://progress-bar.dev/25/?title=Progress)
+
