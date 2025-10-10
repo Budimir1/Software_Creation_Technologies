@@ -19,18 +19,18 @@
 ## Структура проекта
 ```azure
 pz4-todo/
+├── internal/
+│   └── task/
+│       ├── model.go
+│       ├── repo.go
+│       └── handler.go
+├──  pkg/
+│    └── middleware/
+│        └──logger.go
+│        └── cors.go
 ├── go.mod
 ├── go.sum
-├── main.go
-├── internal/
-│ └── task/
-│ ├── model.go
-│ ├── repo.go
-│ └── handler.go
-└── pkg/
-└── middleware/
-├── logger.go
-└── cors.go
+└── main.go
 ```
 
 ## Установка и запуск
