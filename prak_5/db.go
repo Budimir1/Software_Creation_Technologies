@@ -1,4 +1,4 @@
-package prak_5
+package main
 
 import (
 	"context"

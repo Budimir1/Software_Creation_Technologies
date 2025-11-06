@@ -1,4 +1,4 @@
-package prak_5
+package main
 
 import (
 	"context"
@@ -17,7 +17,7 @@ func main() {
 	dsn := os.Getenv("DATABASE_URL")
 	if dsn == "" {
 		// fallback — прямой DSN в коде (только для учебного стенда!)
-		dsn = "postgres://postgres:5654@localhost:5432/todo?sslmode=disable"
+		dsn = "postgres://postgres:5654@localhost:5432/postgres?sslmode=disable"
 	}
 
 	db, err := openDB(dsn)
