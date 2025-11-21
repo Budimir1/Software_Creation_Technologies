@@ -1,8 +1,8 @@
 package httpapi
 
 import (
+	"Budimir/prak_6/internal/models"
 	"encoding/json"
-	"example.com/prac_6/internal/models"
 	"github.com/go-chi/chi/v5"
 	"gorm.io/gorm"
 	"net/http"

@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"strings"
 
-	"example.com/prak_9/internal/core"
-	"example.com/prak_9/internal/repo"
+	"Budimir/prak_9/internal/core"
+	"Budimir/prak_9/internal/repo"
 	"golang.org/x/crypto/bcrypt"
 )
 

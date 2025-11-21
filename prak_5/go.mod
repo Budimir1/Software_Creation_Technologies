@@ -1,4 +1,4 @@
-module example.com/prak_5
+module Budimir/prak_5
 
 go 1.25.1
 

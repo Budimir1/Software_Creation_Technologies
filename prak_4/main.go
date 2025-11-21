@@ -7,8 +7,8 @@ import (
 
 	chimw "github.com/go-chi/chi/v5/middleware"
 
-	"example.com/pz4-todo/internal/task"
-	myMW "example.com/pz4-todo/pkg/middleware"
+	"Budimir/prak_4/internal/task"
+	myMW "Budimir/prak_4/pkg/middleware"
 )
 
 func main() {

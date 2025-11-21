@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	"example.com/prak_7/internal/cache"
+	"Budimir/prak_7/internal/cache"
 )
 
 func main() {

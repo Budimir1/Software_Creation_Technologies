@@ -2,6 +2,7 @@ package repo
 
 import (
 	"errors"
+
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -12,15 +13,33 @@ type UserRecord struct {
 	Hash  []byte
 }
 
-type UserMem struct{ users map[string]UserRecord } // key = email
+type UserMem struct {
+	users map[string]UserRecord // key = email
+}
 
 func NewUserMem() *UserMem {
-	// заранее захэшированные пароли (пример: "secret123")
-	hash := func(s string) []byte { h, _ := bcrypt.GenerateFromPassword([]byte(s), bcrypt.DefaultCost); return h }
-	return &UserMem{users: map[string]UserRecord{
-		"admin@example.com": {ID: 1, Email: "admin@example.com", Role: "admin", Hash: hash("secret123")},
-		"user@example.com":  {ID: 2, Email: "user@example.com", Role: "user", Hash: hash("secret123")},
-	}}
+	// заранее захэшированные пароли
+	hash := func(s string) []byte {
+		h, _ := bcrypt.GenerateFromPassword([]byte(s), bcrypt.DefaultCost)
+		return h
+	}
+
+	return &UserMem{
+		users: map[string]UserRecord{
+			"admin@example.com": {
+				ID:    1,
+				Email: "admin@example.com",
+				Role:  "admin",
+				Hash:  hash("secret123"),
+			},
+			"user@example.com": {
+				ID:    2,
+				Email: "user@example.com",
+				Role:  "user",
+				Hash:  hash("secret123"),
+			},
+		},
+	}
 }
 
 var ErrNotFound = errors.New("user not found")
@@ -32,6 +51,15 @@ func (r *UserMem) ByEmail(email string) (UserRecord, error) {
 		return UserRecord{}, ErrNotFound
 	}
 	return u, nil
+}
+
+func (r *UserMem) ByID(id int64) (UserRecord, error) {
+	for _, u := range r.users {
+		if u.ID == id {
+			return u, nil
+		}
+	}
+	return UserRecord{}, ErrNotFound
 }
 
 func (r *UserMem) CheckPassword(email, pass string) (UserRecord, error) {

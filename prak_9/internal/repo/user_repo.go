@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	"example.com/pz9-auth/internal/core"
+	"Budimir/prak_9/internal/core"
 	"gorm.io/gorm"
 )
 

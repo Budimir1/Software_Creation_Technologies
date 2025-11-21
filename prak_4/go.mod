@@ -1,4 +1,4 @@
-module example.com/pz4-todo
+module Budimir/prak_4
 
 go 1.25.1
 

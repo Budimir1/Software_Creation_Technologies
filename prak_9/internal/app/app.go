@@ -7,9 +7,9 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
-	"example.com/prak_9/internal/http/handlers"
-	"example.com/prak_9/internal/platform/config"
-	"example.com/prak_9/internal/repo"
+	"Budimir/prak_9/internal/http/handlers"
+	"Budimir/prak_9/internal/platform/config"
+	"Budimir/prak_9/internal/repo"
 )
 
 func Run() {

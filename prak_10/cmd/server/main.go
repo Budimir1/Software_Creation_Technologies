@@ -4,13 +4,17 @@ import (
 	"log"
 	"net/http"
 
-	"example.com/prak_10/internal/http"
-	"example.com/prak_10/internal/platform/config"
+	router "Budimir/prak_10/internal/http"
+	"Budimir/prak_10/internal/platform/config"
 )
 
 func main() {
 	cfg := config.Load()
-	mux := router.Build(cfg) // см. следующий шаг
+
+	mux := router.Build(cfg)
+
 	log.Println("listening on", cfg.Port)
-	log.Fatal(http.ListenAndServe(cfg.Port, mux))
+	if err := http.ListenAndServe(cfg.Port, mux); err != nil {
+		log.Fatal(err)
+	}
 }

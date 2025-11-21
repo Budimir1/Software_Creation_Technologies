@@ -4,9 +4,9 @@ import (
 	"log"
 	"net/http"
 
-	"example.com/prac_6/internal/db"
-	"example.com/prac_6/internal/http"
-	"example.com/prac_6/internal/models"
+	"Budimir/prak_6/internal/db"
+	"Budimir/prak_6/internal/http"
+	"Budimir/prak_6/internal/models"
 )
 
 func main() {
