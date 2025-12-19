@@ -19,103 +19,10 @@
 - Go 1.21 и выше
 - Установленный swag CLI
 
-## Установка и запуск
-
-### 1. Установка зависимостей
-```bash
-# В корне проекта notes-api
-go get github.com/swaggo/http-swagger
-go install github.com/swaggo/swag/cmd/swag@latest
-
-### 2. Проверка установки swag
-swag -h
-
-### 3. Добавление аннотаций в код
-Добавить аннотации в следующие файлы:
-
-cmd/api/main.go (верхнеуровневые аннотации):
-// Package main Notes API server.
-//
-// @title Notes API
-// @version 1.0
-// @description Учебный REST API для заметок (CRUD).
-// @contact.name Backend Course
-// @contact.email example@university.ru
-// @BasePath /api/v1
-package main
-
-internal/core/note.go (модели DTO):
-type NoteCreate struct {
-    Title   string `json:"title" example:"Новая заметка"`
-    Content string `json:"content" example:"Текст заметки"`
-}
-
-type NoteUpdate struct {
-    Title   *string `json:"title,omitempty" example:"Обновлено"`
-    Content *string `json:"content,omitempty" example:"Новый текст"`
-}
-
-### 4. Генерация документации
-swag init -g cmd/api/main.go -o docs
-
-### 5. Подключение Swagger UI
-cmd/api/main.go:
-import httpSwagger "github.com/swaggo/http-swagger"
-
-// В функции main после создания роутера:
-r.Get("/docs/*", httpSwagger.WrapHandler)
-
-### 6. Запуск сервера
-go run ./cmd/api
-
-## Использование
-
-### Доступ к документации
-Откройте в браузере: http://localhost:8080/docs/index.html
-
-### Примеры аннотаций для обработчиков
-
-ListNotes:
-// ListNotes godoc
-// @Summary Список заметок
-// @Description Возвращает список заметок с пагинацией и фильтром по заголовку
-// @Tags notes
-// @Param page query int false "Номер страницы"
-// @Param limit query int false "Размер страницы"
-// @Param q query string false "Поиск по title"
-// @Success 200 {array} core.Note
-// @Header 200 {integer} X-Total-Count "Общее количество"
-// @Failure 500 {object} map[string]string
-// @Router /notes [get]
-
-CreateNote:
-// CreateNote godoc
-// @Summary Создать заметку
-// @Tags notes
-// @Accept json
-// @Produce json
-// @Param input body NoteCreate true "Данные новой заметки"
-// @Success 201 {object} core.Note
-// @Failure 400 {object} map[string]string
-// @Failure 500 {object} map[string]string
-// @Router /notes [post]
-
-## Автоматизация через Makefile
-Создайте файл Makefile в корне проекта:
-
-.PHONY: run swagger
-
-run:
-    go run ./cmd/api
-
-swagger:
-    swag init -g cmd/api/main.go -o docs
-
-Использование:
-make swagger  # Генерация документации
-make run      # Запуск сервера
+## Установка и 
 
 ## Структура проекта (после генерации)
+```
 notes-api/
 ├── cmd/api/main.go                 # Точка входа с аннотациями
 ├── docs/                           # Автогенерируемая документация
@@ -134,3 +41,33 @@ notes-api/
 ├── api/openapi.yaml                # Опционально: schema-first спецификация
 ├── Makefile                        # Автоматизация генерации
 └── go.mod
+```
+
+Запуск проекта:
+Клоним репозиторий:
+git clone 
+Проверяем что Go и Git есть:
+pish_golang % cd prak_twelve
+
+prak_twelve % go version
+go version go1.23.2 darwin/arm64
+
+prak_twelve % git --version
+git version 2.39.5 (Apple Git-154)
+
+prak_twelve %
+создаём SWAGGER:
+swag init -g cmd/api/main.go -o docs
+Стоит отметить, что есть ошибка, связанная с LeftDelim и RightDelim (cносим их к чёртовому С В А Г Г Е Р У)
+
+Демонстрация:
+Скриншот работающей страницы Swagger UI
+
+![img.png](image%2Fimg.png)
+![img_2.png](image%2Fimg_2.png)
+![img_1.png](image%2Fimg_1.png)
+![img_3.png](image%2Fimg_3.png)
+![img_4.png](image%2Fimg_4.png)
+
+[sponge-bob-finished.mp4](image_5%2Fsponge-bob-finished.mp4)
+

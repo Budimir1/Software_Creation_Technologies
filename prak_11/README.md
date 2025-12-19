@@ -24,7 +24,7 @@
 ```bash
 git clone <ваш-репозиторий>
 cd notes-api
-
+```
 2. Инициализируйте проект и установите зависимости:
 go mod init example.com/notes-api
 go get github.com/go-chi/chi/v5
@@ -37,9 +37,12 @@ go run ./cmd/api
 ## API Endpoints
 
 ### Создание заметки
+
 curl -X POST http://localhost:8080/api/v1/notes \
   -H "Content-Type: application/json" \
   -d '{"title":"Первая заметка", "content":"Это тест"}'
+
+![img.png](image%2Fimg.png)
 
 ### Получение всех заметок
 curl http://localhost:8080/api/v1/notes
@@ -69,3 +72,6 @@ notes-api/
 │       └── note_mem.go             # In-memory репозиторий
 ├── api/openapi.yaml                # Документация OpenAPI
 └── go.mod
+
+
+![img_2.png](image%2Fimg_2.png)
