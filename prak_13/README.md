@@ -24,6 +24,7 @@
 mkdir pprof-lab
 cd pprof-lab
 go mod init example.com/pprof-lab
+```
 
 ### 2. Структура проекта
 pprof-lab/
@@ -90,6 +91,7 @@ go install github.com/rakyll/hey@latest
 
 # Запустите нагрузку
 hey -n 200 -c 8 http://localhost:8080/work
+![img.png](image%2Fimg.png)
 
 ### Анализ профилей
 #### Веб-интерфейс:
@@ -97,12 +99,7 @@ go tool pprof -http=:9999 http://localhost:8080/debug/pprof/profile?seconds=30
 
 #### Консольный анализ:
 go tool pprof http://localhost:8080/debug/pprof/profile?seconds=30
-# В интерактивном режиме:
-# (pprof) top
-# (pprof) list Fib
-# (pprof) web
-
-## Измерение времени выполнения
+![img_1.png](image%2Fimg_1.png)
 
 ### 1. Декоратор для измерения времени
 internal/work/timer.go:
@@ -175,6 +172,7 @@ func init() {
 - http://localhost:8080/debug/pprof/mutex
 
 ## Структура проекта (полная)
+```
 pprof-lab/
 ├── cmd/api/main.go                      # HTTP-сервер с pprof
 ├── internal/work/
@@ -184,6 +182,7 @@ pprof-lab/
 ├── Makefile                             # Автоматизация
 ├── README.md                            # Документация
 └── go.mod
+```
 
 ## Makefile для автоматизации
 .PHONY: run profile-cpu profile-heap benchmark load-test
