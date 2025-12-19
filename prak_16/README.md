@@ -60,7 +60,7 @@ type Note struct {
     CreatedAt string `db:"created_at" json:"created_at"`
     UpdatedAt string `db:"updated_at" json:"updated_at"`
 }
-
+```
 ---
 
 ## Реализованные эндпоинты
@@ -82,8 +82,8 @@ type Note struct {
 ### Вариант A: Docker Compose
 
 1. Клонирование и инициализация
-mkdir pz16-integration && cd pz16-integration
-go mod init example.com/pz16-integration
+mkdir prak_16 && cd prak_16
+go mod init Budimir/prak_16
 
 2. Запуск тестовой базы данных
 docker-compose up -d
@@ -104,61 +104,10 @@ go get github.com/testcontainers/testcontainers-go/modules/postgres@latest
 go test -v ./integration/
 
 ---
-
-## Docker Compose конфигурация
-
-version: "3.9"
-services:
-  pg:
-    image: postgres:16
-    environment:
-      POSTGRES_USER: test
-      POSTGRES_PASSWORD: test
-      POSTGRES_DB: notes_test
-    ports:
-      - "54321:5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U test -d notes_test"]
-      interval: 2s
-      timeout: 2s
-      retries: 20
-
----
-
-## Пример интеграционного теста
-
-func TestCreateAndGetNote(t *testing.T) {
-    dsn := os.Getenv("DB_DSN")
-    if dsn == "" {
-        t.Skip("DB_DSN not set")
-    }
-    
-    srv := newServer(t, dsn)
-    defer srv.Close()
-    
-    // Создание заметки
-    resp, err := http.Post(srv.URL+"/notes", "application/json",
-        strings.NewReader(`{"title":"Hello","content":"World"}`))
-    if err != nil {
-        t.Fatal(err)
-    }
-    
-    if resp.StatusCode != http.StatusCreated {
-        t.Fatalf("status %d != 201", resp.StatusCode)
-    }
-    
-    // Проверка получения заметки
-    var created map[string]any
-    body, _ := io.ReadAll(resp.Body)
-    _ = json.Unmarshal(body, &created)
-    id := int64(created["id"].(float64))
-    
-    resp2, err := http.Get(fmt.Sprintf("%s/notes/%d", srv.URL, id))
-    if err != nil {
-        t.Fatal(err)
-    }
-    
-    if resp2.StatusCode != http.StatusOK {
-        t.Fatalf("status %d != 200", resp2.StatusCode)
-    }
-}
+## Проверка
+![img.png](image%2Fimg.png)
+![img_1.png](image%2Fimg_1.png)
+## Примеры успешного вывода тестов:
+![img_2.png](image%2Fimg_2.png)
+![img_3.png](image%2Fimg_3.png)
+![img_4.png](image%2Fimg_4.png)
