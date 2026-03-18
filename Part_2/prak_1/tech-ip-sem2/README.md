@@ -59,22 +59,15 @@ Tasks	AUTH_BASE_URL	http://localhost:8081	Базовый URL для вызова
 ## Примеры запросов
 ### Получить токен
 ```bash
-curl -s -X POST http://localhost:8081/v1/auth/login \
-  -H "Content-Type: application/json" \
-  -H "X-Request-ID: req-001" \
-  -d '{"username":"student","password":"student"}'
+invoke-restmethod -uri "http://localhost:8081/v1/auth/login" -method post -body '{"username":"student","password":"student"}' -contenttype "application/json" -headers @{ "x-request-id" = "req-001" }
 ```
 ### Создать задачу (с токеном)
 ```bash
-curl -i -X POST http://localhost:8082/v1/tasks \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer demo-token" \
-  -H "X-Request-ID: req-002" \
-  -d '{"title":"Выполнить ПЗ","description":"разделение монолита","due_date":"2026-01-15"}'
+invoke-restmethod -uri "http://localhost:8082/v1/tasks" -method post -body '{"title":"Make a PZ","description":"monolith separation","due_date":"2026-01-15"}' -contenttype "application/json" -headers @{ "authorization" = "bearer demo-token"; "x-request-id" = "req-demo-123" }
 ```
 ### Попытка без токена (ожидается 401)
 ```bash
-curl -i http://localhost:8082/v1/tasks -H "X-Request-ID: req-003"
+invoke-restmethod -uri "http://localhost:8082/v1/tasks" -method get -headers @{ "x-request-id" = "req-003" }
 ```
 ## Полная документация API – в файле docs/pz17_api.md.
 
