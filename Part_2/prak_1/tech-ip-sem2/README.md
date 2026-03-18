@@ -83,7 +83,11 @@ curl -i http://localhost:8082/v1/tasks -H "X-Request-ID: req-003"
 
 Что видно на скриншоте:
 
-Терминал PowerShell с выполненной командой go run ./cmd/auth.
+```powershell
+cd services/auth
+$env:AUTH_PORT = 8081
+go run ./cmd/auth
+```
 
 Лог сервиса: Auth service starting on :8081.
 
@@ -118,51 +122,83 @@ token_type (значение demo-token и Bearer).
 Подтверждение, что токен успешно получен.
 
 ![img.png](picture/skrin_3.png)
-# Скриншот 4: Запрос к Tasks без токена (401)
-## Файл: picture/skrin_5.png
+
+# Скриншот 4: Создание задачи с прокидыванием request-id
+## Файл: picture/skrin_4.png
 Что видно на скриншоте:
 
-Команда invoke-restmethod без заголовка Authorization.
+Команда invoke-restmethod (или curl) для создания задачи:
+POST /v1/tasks с заголовками Authorization: Bearer demo-token и X-Request-ID: req-demo-123.
+
+Тело запроса: {"title":"Сделать ПЗ","description":"разделение монолита","due_date":"2026-01-15"}.
+
+Ответ сервера: статус 201 Created и JSON созданной задачи (поля id, title, description, due_date, done).
+
+В логах Auth service видна запись с тем же req-demo-123 и статусом 200 для эндпоинта /v1/auth/verify.
+
+В логах Tasks service – запись с req-demo-123 и статусом 201.
+
+Демонстрация сквозной трассировки запроса.
+![img.png](picture/skrin_4.png)
+
+# Скриншот 5: Запрос к Tasks без токена (401)
+## Файл: picture/skrin_5.png
+Что видно на скриншоте:
+```markdown
+Команда запроса списка задач без заголовка Authorization.
 
 Ошибка: missing authorization header и код 401.
 
 В логах Tasks service – запись с req-no-token и статусом 401.(Общий скрин 4 и 5 ошибки ниже)
-![img.png](picture/skrin4.png)
-# Файл: picture/skrin_5.png
-## Что видно на скриншоте:
+```
+![img_1.png](picture/skrin_5.png)
 
-Команда invoke-restmethod с заголовком Authorization: Bearer wrong-token.
+# Скриншот 6: Запрос к Tasks с неверным токеном (401)
+## Файл: picture/skrin_6.png
+Что видно на скриншоте:
 
-Ошибка: missing authorization header или unauthorized с кодом 401.
+```markdown
+Команда запроса с заголовком Authorization: Bearer wrong-token.
+
+Ошибка: unauthorized (или аналогичное сообщение) с кодом 401.
 
 В логах Tasks service – запись с req-wrong-token и статусом 401.
-![img.png](picture/skrin_5.png)
+```
+
+![img.png](picture/skrin_6.png)
 ## Скриншот общих ошибок в Tasks
-![img_1.png](picture/skrin_4_5.png)
-# Скриншот 6: Auth service недоступен (503)
+На этом скриншоте показаны записи из логов Tasks service, подтверждающие, что сервис 
+корректно отвечает статусом 401 на запросы без токена и с неверным токеном (request-id 
+req-no-token и req-wrong-token).
+
+![img.png](picture/skrin_5-6.png)
+# Скриншот 7: Auth service недоступен (503)
 ## Файл: picture/skrin_7.png
 Что видно на скриншоте:
 
-Auth service остановлен (Ctrl+C в окне 1).
+```markdown
+Auth service остановлен (в окне 1 нажат Ctrl+C).
 
-Команда invoke-restmethod (или curl.exe) с правильным токеном, но Auth не отвечает.
+Команда запроса к Tasks с правильным токеном (Authorization: Bearer demo-token) и X-Request-ID: req-auth-down.
 
 Ошибка: The remote server returned an error: (503) Service Unavailable.
 
-В логах Tasks service – запись с req-auth-down и статусом 503 (или 502, в зависимости от реализации).
-
+В логах Tasks service – запись с req-auth-down и статусом 503 (или 502), подтверждающая, что Tasks корректно обрабатывает недоступность Auth.
+```
 Подтверждение, что Tasks корректно обрабатывает недоступность Auth.
-![img.png](picture/img.png)
-# Скриншот 7: Получение списка задач после восстановления Auth
+![img.png](picture/skrin_7.png)
+# Скриншот 8: Получение списка задач после восстановления Auth
 ## Файл: picture/skrin_8.png
 Что видно на скриншоте:
 
+```markdown
 Auth service запущен заново.
 
-Команда invoke-restmethod (или curl.exe) с заголовком Authorization: Bearer demo-token и X-Request-ID: req-list.
+Команда GET /v1/tasks с заголовками Authorization: Bearer demo-token и X-Request-ID: req-list.
 
-Ответ: массив задач в формате JSON.
+Ответ: массив задач в формате JSON (содержит задачу, созданную на шаге 4).
 
-В логах Auth и Tasks – соответствующие записи с request-id req-list.
+В логах Auth и Tasks – записи с req-list и статусами 200, подтверждающие полную работоспособность системы после восстановления.
+```
 
-![img.png](picture/skrin_7.png)
+![img.png](picture/skrin_8.png)
