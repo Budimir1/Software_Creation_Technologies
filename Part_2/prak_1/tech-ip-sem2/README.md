@@ -103,7 +103,7 @@ go run ./cmd/tasks
 # Скриншот 3: Получение токена через Auth service
 ## Файл: picture/skrin_3.png
 Что видно на скриншоте:
-```json
+```markdown
 Команда invoke-restmethod для отправки POST-запроса на 
 /v1/auth/login с телом {"username":"student","password":"student"} и 
 заголовком X-Request-ID: req-login-001.
