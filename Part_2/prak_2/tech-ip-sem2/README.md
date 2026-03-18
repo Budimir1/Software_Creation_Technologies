@@ -36,7 +36,7 @@ tech-ip-sem2/
 └── go.sum
 ```
 ## Предварительные требования
-```json
+```markdown
 Установленный Go (версия 1.18+)
 
 Установленные инструменты:
@@ -138,12 +138,12 @@ curl -H "Authorization: valid-token" http://localhost:8082/tasks
 # Обработка ошибок и маппинг gRPC → HTTP
 
 ```markdown
-| gRPC код              | HTTP статус                        | Описание                              |
+| gRPC код              | HTTP статус                         | Описание                              |
 |-----------------------|-------------------------------------|---------------------------------------|
 | `Unauthenticated`     | 401 Unauthorized                    | Неверный или отсутствующий токен      |
 | `DeadlineExceeded`    | 504 Gateway Timeout                 | Таймаут при вызове Auth               |
-| `Unavailable`         | 503 Service Unavailable             | Auth сервис не отвечает                |
-| Прочие (`Internal`    | 500 Internal Server Error       | Внутренняя ошибка                     |
+| `Unavailable`         | 503 Service Unavailable             | Auth сервис не отвечает               |
+| Прочие (`Internal`    | 500 Internal Server Error           | Внутренняя ошибка                     |
 ```
 
 ## Контрольные вопросы
