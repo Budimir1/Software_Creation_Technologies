@@ -52,12 +52,14 @@ go run ./cmd/server
 ```bash
 prometheus --config.file=monitoring/prometheus.yml
 ```
+![img.png](screen/start_server_prometheus.png)
 ![img.png](screen/prometheus.png)
 
 ### 3. Grafana
 ```bash
 Интерфейс: http://localhost:3000 (логин admin/admin)
 ```
+![img.png](screen/start_server_grafana.png)
 ![img.png](screen/connecting_to_prometheus.png)
 ### 🧪 Генерация нагрузки
 ```bash
