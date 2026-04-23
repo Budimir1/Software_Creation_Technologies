@@ -77,13 +77,13 @@ go get github.com/lib/pq
 ```bash
 psql -U postgres -h localhost -p 5432
 ```
-![img.png](1.png)
+![img.png](scrin/1.png)
 ### Создайте базу данных и выйдите:
 ```sql
 CREATE DATABASE study_security OWNER postgres;
 \q
 ```
-![img.png](2.png)
+![img.png](scrin/2.png)
 
 ### Выполните скрипт sql/init.sql для создания таблиц и начальных данных:
 ```bash
@@ -147,12 +147,12 @@ curl -k https://localhost:8443/students?id=1
 }
 ```
 При запросе несуществующего студента (id=999) вернёт student not found.
-![img.png](4.png)
+![img.png](scrin/4.png)
 
 📌 Дополнительное задание
 HTTP-редирект на HTTPS
 Добавьте HTTP-сервер на порту 8080, который перенаправляет все запросы на https://localhost:8443.
-![img.png](3.png)
+![img.png](scrin/3.png)
 
 
 
