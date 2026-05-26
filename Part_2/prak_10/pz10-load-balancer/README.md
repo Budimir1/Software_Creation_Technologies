@@ -116,3 +116,4 @@ Health endpoint /health необходим для мониторинга и ко
 ```bash
 docker compose down
 ```
+
