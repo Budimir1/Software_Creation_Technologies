@@ -468,15 +468,15 @@ POST /query
 
 ---
 ## 12.2 Скриншоты
-![Скриншот 1](./assets/scr_1.png)
+![Скриншот 1](./skrin/img_1.png)
 ----
-![Скриншот 2](./assets/scr_2.png)
+![Скриншот 2](./skrin/img_2.png)
 ----
-![Скриншот 3](./assets/scr_3.png)
+![Скриншот 3](./skrin/img_3.png)
 ----
-![Скриншот 3](./assets/scr_4.png)
+![Скриншот 3](./skrin/img_4.png)
 ----
-![Скриншот 3](./assets/scr_5.png)
+![Скриншот 3](./skrin/img_5.png)
 
 
 ## 13. Итоговый вывод

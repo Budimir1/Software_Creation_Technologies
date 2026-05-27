@@ -1,119 +1,127 @@
-# Практическое занятие №10. Горизонтальное масштабирование с NGINX Load Balancer
+# pz10-load-balancer
 
-## Цель
-Освоить базовый подход к горизонтальному масштабированию backend-приложения:
-- запуск нескольких экземпляров одного сервиса;
-- распределение HTTP-запросов через **NGINX** в роли балансировщика нагрузки.
+Практическое занятие №10: горизонтальное масштабирование backend-сервиса на Go через NGINX Load Balancer.
 
-## Структура проекта
+## Что реализовано
 
-```markdown
+- Go HTTP-сервис `tasks`.
+- Health endpoint: `GET /health`.
+- Endpoint списка задач: `GET /v1/tasks`.
+- Endpoint идентификации реплики: `GET /whoami`.
+- Заголовок `X-Instance-ID` в ответах.
+- Логирование входящих запросов с указанием `INSTANCE_ID`.
+- 3 реплики backend-сервиса.
+- NGINX reverse proxy/load balancer.
+- Проверка отказоустойчивости при остановке одной реплики.
+
+## Структура
+
+```text
 pz10-load-balancer/
-├── services/
-│ └── tasks/ # Go-сервис tasks
-│ ├── cmd/server/main.go # основной код
-│ ├── go.mod
-│ └── Dockerfile
-├── deploy/
-│ └── lb/
-│ ├── docker-compose.yml # описание сервисов (tasks_1, tasks_2, nginx)
-│ └── nginx.conf # конфигурация upstream и проксирования
-└── README.md
+  services/
+    tasks/
+      cmd/
+        server/
+          main.go
+      go.mod
+      Dockerfile
+  deploy/
+    lb/
+      docker-compose.yml
+      nginx.conf
 ```
 
-## Компоненты
-- **tasks** – backend-сервис на Go, отдающий список задач и имеющий health‑check.
-    - `GET /health` – проверка доступности, возвращает `{"status":"ok","instance":"<INSTANCE_ID>"}`.
-    - `GET /v1/tasks` – возвращает JSON со списком задач.
-    - Каждый инстанс идентифицирует себя через заголовок `X-Instance-ID`.
-- **NGINX** – балансировщик, слушает порт `8080` и распределяет запросы между репликами `tasks_1` и `tasks_2` по алгоритму round‑robin.
-- **Docker Compose** – управляет запуском двух реплик сервиса и NGINX.
-
-## Предварительные требования
-- Docker
-- Docker Compose
-- curl (или PowerShell для проверок)
-
-## Запуск
-1. Перейдите в папку с `docker-compose.yml`:
-   ```bash
-   cd pz10-load-balancer/deploy/lb
-   ```
-   Соберите образы и запустите контейнеры:
+## Запуск через Docker Compose
 
 ```bash
+cd deploy/lb
 docker compose up -d --build
 ```
-Убедитесь, что все контейнеры работают:
+
+Проверка контейнеров:
 
 ```bash
 docker compose ps
 ```
 
-Ожидается tasks_1, tasks_2 и nginx_lb со статусом Up.
+## Проверка health endpoint
 
-Проверка работы
-Health‑check
 ```bash
 curl -i http://localhost:8080/health
 ```
-Ответ должен содержать 200 OK, {"status":"ok","instance":"tasks-1"} или …tasks-2 и заголовок X-Instance-ID.
 
-Балансировка запросов
-Выполните несколько запросов к /v1/tasks и проследите за заголовком X-Instance-ID:
+## Проверка балансировки
 
-powershell
-# PowerShell
-1..10 | ForEach-Object {
-$r = Invoke-WebRequest -Uri http://localhost:8080/v1/tasks
-Write-Host "Instance: $($r.Headers['X-Instance-ID'])"
-}
-Заголовок должен чередоваться между tasks-1 и tasks-2.
+```bash
+for i in {1..12}; do
+  curl -s -i http://localhost:8080/whoami | grep -E "X-Instance-ID|instance"
+done
+```
 
-Передача заголовков через NGINX
+Ожидается, что ответы будут приходить от разных реплик: `tasks-1`, `tasks-2`, `tasks-3`.
+
+## Проверка списка задач
+
+```bash
+curl -i http://localhost:8080/v1/tasks
+```
+
+## Проверка прокидывания Authorization
+
 ```bash
 curl -i http://localhost:8080/v1/tasks -H "Authorization: Bearer demo-token"
 ```
-Сам сервис не валидирует токен, но демонстрирует, что балансировщик прокидывает заголовки.
 
-Проверка отказоустойчивости
-Остановите одну реплику:
+## Проверка отказоустойчивости
+
+Остановить одну реплику:
 
 ```bash
 docker compose stop tasks_1
 ```
-Повторите запросы – теперь все ответы должны приходить от оставшегося инстанса (tasks-2).
-Затем восстановите:
+
+Повторить запросы:
+
+```bash
+for i in {1..8}; do
+  curl -s -i http://localhost:8080/whoami | grep -E "X-Instance-ID|instance"
+done
+```
+
+Вернуть реплику:
 
 ```bash
 docker compose start tasks_1
 ```
-Балансировка снова распределит запросы между двумя репликами.
 
-### Ключевые выводы
-Горизонтальное масштабирование увеличивает мощность системы через запуск нескольких копий сервиса.
+## Просмотр логов
 
-Load balancer (NGINX) скрывает внутреннюю структуру, предоставляя единую точку входа.
-
-Health endpoint /health необходим для мониторинга и контроля доступности инстансов.
-
-Заголовок X-Instance-ID наглядно показывает, какой именно инстанс обработал запрос.
-
-При отказе одной реплики система продолжает работать.
-
-Важно: сервис должен быть stateless (или разделять состояние через общую БД/кэш), иначе данные «прыгают» между несинхронизированными репликами.
-
-### Дополнительные возможности
-Добавить третью реплику tasks_3 в docker-compose.yml и в nginx.conf.
-
-Реализовать маршрут /whoami для быстрой идентификации инстанса.
-
-Добавить логирование запросов в сервисе.
-
-Подключить общее хранилище (БД, Redis) для проверки работы с shared state.
-
-Очистка
 ```bash
+docker logs tasks_1
+docker logs tasks_2
+docker logs tasks_3
+docker logs nginx_lb
+```
+
+## Остановка стенда
+
+```bash
+cd deploy/lb
 docker compose down
 ```
 
+## Скриншоты:
+![Скриншот 1](./skrin/img_1.png)
+----
+![Скриншот 2](./skrin/img_2.png)
+----
+![Скриншот 3](./skrin/img_3.png)
+----
+![Скриншот 4](./skrin/img_4.png)
+----
+![Скриншот 5](./skrin/img_5.png)
+----
+![Скриншот 6](./skrin/img_6.png)
+----
+![Скриншот 7](./skrin/img_7.png)
+----

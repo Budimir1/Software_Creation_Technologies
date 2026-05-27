@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   tasks_1:
     build:
@@ -17,6 +15,14 @@ services:
       APP_PORT: "8082"
       INSTANCE_ID: "tasks-2"
 
+  tasks_3:
+    build:
+      context: ../../services/tasks
+    container_name: tasks_3
+    environment:
+      APP_PORT: "8082"
+      INSTANCE_ID: "tasks-3"
+
   nginx:
     image: nginx:1.27-alpine
     container_name: nginx_lb
@@ -27,3 +33,4 @@ services:
     depends_on:
       - tasks_1
       - tasks_2
+      - tasks_3

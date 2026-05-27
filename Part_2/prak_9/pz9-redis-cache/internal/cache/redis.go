@@ -4,8 +4,7 @@ import (
 	"context"
 	"time"
 
-	"budimir/pz9-redis-cache/internal/config"
-
+	"github.com/CyberGeo335/pz9-redis-cache/internal/config"
 	"github.com/redis/go-redis/v9"
 )
 
@@ -23,5 +22,6 @@ func NewRedisClient(cfg config.Config) *redis.Client {
 func Ping(ctx context.Context, client *redis.Client) error {
 	ctx, cancel := context.WithTimeout(ctx, 2*time.Second)
 	defer cancel()
+
 	return client.Ping(ctx).Err()
 }

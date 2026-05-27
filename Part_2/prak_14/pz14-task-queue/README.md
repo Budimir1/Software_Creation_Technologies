@@ -430,19 +430,19 @@ docker compose down -v
 
 ---
 ## 10. Скриншоты
-![Скриншот 1](./assets/scr_1.png)
+![Скриншот 1](./skrin/img_1.png)
 ----
-![Скриншот 2](./assets/scr_2.png)
+![Скриншот 2](./skrin/img_2.png)
 ----
-![Скриншот 3](./assets/scr_3.png)
+![Скриншот 3](./skrin/img_3.png)
 ----
-![Скриншот 4](./assets/scr_4.png)
+![Скриншот 4](./skrin/img_4.png)
 ----
-![Скриншот 5](./assets/scr_5.png)
+![Скриншот 5](./skrin/img_5.png)
 ----
-![Скриншот 6](./assets/scr_6.png)
+![Скриншот 6](./skrin/img_6.png)
 ----
-![Скриншот 7](./assets/scr_7.png)
+![Скриншот 7](./skrin/img_7.png)
 
 ## 11. Контрольные вопросы и ответы
 
