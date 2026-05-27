@@ -47,5 +47,5 @@
 - *  **Практика 12** — [Software_Creation_Technologies/](/Part_2/prak_12/) ✅
 - *  **Практика 13** — [Software_Creation_Technologies/](/Part_2/prak_13/) ✅
 - *  **Практика 14** — [Software_Creation_Technologies/](/Part_2/prak_14/) ✅
-- *  **Практика 15** — [Software_Creation_Technologies/](/Part_2/prak_15/) ⏳
-- *  **Практика 16** — [Software_Creation_Technologies/](/Part_2/prak_16/) ⏳
+- *  **Практика 15** — [Software_Creation_Technologies/](/Part_2/prak_15/) ✅
+- *  **Практика 16** — [Software_Creation_Technologies/](/Part_2/prak_16/) ✅
